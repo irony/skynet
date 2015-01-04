@@ -26,6 +26,7 @@ describe('## httpworker', function () {
     it('has inherited worker methods', function () {
       expect(worker).to.have.property('process');
       expect(worker).to.have.property('init');
+      expect(worker).to.have.property('write');
       expect(worker).to.be.an.instanceof(HttpWorker);
       expect(worker).to.be.an.instanceof(Worker);
     });
@@ -71,10 +72,27 @@ describe('## httpworker', function () {
           expect(data.foo, 'foo').to.be.eql('bar');
           done();
         });
-        worker.emit({foo:'bar'});
+        worker.write({foo:'bar'});
       });
     });
-  });
 
+    it('passes data from input to connection', function (done) {
+      worker.init({port:1339}, function() {
+        request.get('http://localhost:1339')
+        .on('data', function(data){
+          data = JSON.parse(data);
+          expect(data, 'data').to.exist;
+          expect(data.foo, 'foo').to.be.eql('bar');
+          done();
+        });
+        worker.process = function(data){
+          worker.write(data); // passthrough
+        }
+        worker.connect(input);
+        input.write({foo:'bar'});
+      });
+    });
+
+  });
 
 });

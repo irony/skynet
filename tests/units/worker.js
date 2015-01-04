@@ -18,7 +18,7 @@ describe('## worker', function () {
 
   it('has correct properties', function () {
     expect(worker).to.have.property('process');
-    expect(worker).to.have.property('output');
+    expect(worker).to.have.property('pipe');
     expect(worker).to.not.have.property('server');
   });
 
