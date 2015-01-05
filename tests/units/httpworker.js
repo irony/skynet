@@ -15,7 +15,8 @@ describe('## httpworker', function () {
 
   beforeEach(function () {
     worker = new HttpWorker();
-    input = new Stream();
+    input = new HttpWorker();
+    input.init();
   });
 
   afterEach(function (done) {
@@ -29,15 +30,6 @@ describe('## httpworker', function () {
       expect(worker).to.have.property('write');
       expect(worker).to.be.an.instanceof(HttpWorker);
       expect(worker).to.be.an.instanceof(Worker);
-    });
-
-    it('handles standard input correctly', function (done) {
-      worker.connect(input);
-      worker.process = function(data){
-        expect(data).to.have.property('foo');
-        done();
-      }
-      input.write({foo:'bar'});
     });
   });
 

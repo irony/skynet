@@ -18,7 +18,6 @@
   "trailing": true,
   "smarttabs": true,
   "maxdepth": 3,
-  "asi" : true,
   "white": false,
   "globals"   : {
     /* MOCHA */
