@@ -18,8 +18,8 @@ describe('## pipeline', function () {
       worker1 = new Worker();
       worker2 = new Worker();
       worker3 = new Worker();
-      worker1.process=function(data){worker3.write(data)};
-      worker2.process=function(data){worker3.write(data)};
+      worker1.process=function(data){worker1.write(data)};
+      worker2.process=function(data){worker2.write(data)};
       worker3.process=function(data){worker3.write(data)};
     });
 
@@ -38,9 +38,9 @@ describe('## pipeline', function () {
       worker1 = new HttpWorker();
       worker2 = new HttpWorker();
       worker3 = new HttpWorker();
-      worker1.process=function(data){worker3.emit(data)};
-      worker2.process=function(data){worker3.emit(data)};
-      worker3.process=function(data){worker3.emit(data)};
+      worker1.process=function(data){worker1.write(data)};
+      worker2.process=function(data){worker2.write(data)};
+      worker3.process=function(data){worker3.write(data)};
       // start
       worker1.init();
       worker2.init();
