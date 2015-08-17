@@ -70,6 +70,36 @@ describe('## pipeline', function () {
       });
     });
 
+    it('can pipe output', function(done){
+      
+      //connect
+      worker1.pipe(worker2).pipe(worker3);
+
+      // test
+      worker1.write({foo:'bar'});
+      worker3.on('data', function(data){
+        expect(data).to.have.property('foo');
+        done();
+      });
+    });
+
+    it('can change data', function(done){
+      
+      //connect
+      worker1.pipe(worker2).pipe(worker3)
+
+      // test
+      worker1.write({foo:'bar'});
+      worker2.process = function(data){
+        data.changed = true;
+        this.write(data);
+      }
+      worker3.on('data', function(data){
+        expect(data).to.have.property('foo');
+        expect(data).to.have.property('changed');
+        done();
+      });
+    });
 
     it('closes the ports correctly', function (done) {
       

@@ -23,7 +23,7 @@ describe('## worker', function () {
   });
 
   it('handles input correctly', function (done) {
-    worker.listen(input);
+    worker.connect(input);
     worker.process = function(data){
       expect(data).to.have.property('foo');
       done();
@@ -33,7 +33,7 @@ describe('## worker', function () {
 
   it('handles multiple inputs', function (done) {
     var inputs = [new Stream(), new Stream(), new Stream()];
-    worker.listen(inputs);
+    worker.connect(inputs);
     worker.process = sinon.spy();
     inputs.forEach(function(input, i){
       input.write({ nr : i });

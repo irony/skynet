@@ -85,6 +85,23 @@ describe('## httpworker', function () {
       });
     });
 
+    it('can modify data', function (done) {
+      worker.init({port:1339}, function() {
+        request.get('http://localhost:1339')
+        .on('data', function(data){
+          data = JSON.parse(data);
+          expect(data.changed, 'changed').to.be.eql(true);
+          done();
+        });
+        worker.process = function(data){
+          data.changed = true;
+          worker.write(data); // passthrough
+        }
+        worker.connect(input);
+        input.write({foo:'bar'});
+      });
+    });
+
   });
 
 });
