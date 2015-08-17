@@ -1,0 +1,32 @@
+{
+  "name": "skynet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha tests/* -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/irony/skynet.git"
+  },
+  "author": "Christian Landgren (irony) & Per-Olof Jernberg (possan)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/irony/skynet/issues"
+  },
+  "homepage": "https://github.com/irony/skynet#readme",
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "sinon": "^1.15.4",
+    "sinon-chai": "^2.8.0"
+  },
+  "dependencies": {
+    "async": "^1.4.2",
+    "promise": "^7.0.4",
+    "request": "^2.60.0"
+  }
+}

@@ -1,3 +1,4 @@
+var Promise = require('promise');
 var chai = require('chai');
 var sinon = require('sinon');
 var expect = chai.expect;
@@ -7,6 +8,8 @@ chai.use(sinonChai);
 var Worker = require('../../lib/worker');
 var HttpWorker = require('../../lib/httpworker');
 var Stream = require('../../lib/Stream');
+
+var passThrough = function(data){ this.write(data); };
 
 describe('## pipeline', function () {
   var worker1;
@@ -18,9 +21,9 @@ describe('## pipeline', function () {
       worker1 = new Worker();
       worker2 = new Worker();
       worker3 = new Worker();
-      worker1.process=function(data){worker1.write(data)};
-      worker2.process=function(data){worker2.write(data)};
-      worker3.process=function(data){worker3.write(data)};
+      worker1.process=passThrough;
+      worker2.process=passThrough;
+      worker3.process=passThrough;
     });
 
     it('can pipe standard workers together', function (done) {
@@ -38,13 +41,19 @@ describe('## pipeline', function () {
       worker1 = new HttpWorker();
       worker2 = new HttpWorker();
       worker3 = new HttpWorker();
-      worker1.process=function(data){worker1.write(data)};
-      worker2.process=function(data){worker2.write(data)};
-      worker3.process=function(data){worker3.write(data)};
+      worker1.process=passThrough;
+      worker2.process=passThrough;
+      worker3.process=passThrough;
       // start
       worker1.init();
       worker2.init();
       worker3.init();
+    });
+
+    afterEach(function (done) {
+      Promise.all([worker1.close(), worker2.close(), worker3.close()]).then(function(){
+        done();
+      });
     });
 
     it('can connect workers together', function (done) {
@@ -59,6 +68,17 @@ describe('## pipeline', function () {
         expect(data).to.have.property('foo');
         done();
       });
+    });
+
+
+    it('closes the ports correctly', function (done) {
+      
+      var worker = new HttpWorker({port:9999});
+      worker.init();
+      worker.close(function(){
+        var reuse = new HttpWorker({port:9999});
+        reuse.close(done);
+      })
     });
   });
 });

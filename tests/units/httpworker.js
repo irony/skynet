@@ -20,7 +20,7 @@ describe('## httpworker', function () {
   });
 
   afterEach(function (done) {
-    worker.close(done);
+    input.close(worker.close.bind(worker, done));
   });
 
   describe('inheritance', function () {
