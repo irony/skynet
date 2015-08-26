@@ -50,16 +50,5 @@ describe('## state', function () {
 	    done();
     });
 
-
-    it('can be initialized with a state', function (done) {
-    	var stateWorker = new Worker({state: { foo: 'bar' }});
-    	input.pipe(stateWorker);
-    	stateWorker.process = function(){
-    		expect(this.state).to.have.property('foo');
-    		done();
-    	}
-    	input.write('blarg');
-    });
-
   });
 });
